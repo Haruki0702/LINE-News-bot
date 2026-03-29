@@ -91,7 +91,7 @@ if __name__ == "__main__":
     for msg in scrape_news(url):
         send_message+=msg+"\n\n"
     send_message+="スポーツ\n"
-    for msg in scrape_catecory_news("https://sports.yahoo.co.jp/"):
+    for msg in scrape_catecory_news("https://news.yahoo.co.jp/categories/sports"):
         send_message+=msg+"\n\n"
     send_line_message(send_message)
 
