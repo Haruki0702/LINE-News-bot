@@ -75,23 +75,33 @@ def scrape_news(url):
 def scrape_catecory_news(url):
     req=requests.get(url)
     req.encoding=req.apparent_encoding
-    soup=BeautifulSoup(req.text,'html.parser')
-    items=soup.find_all(id="topicList")
+    soup=BeautifulSoup(req.text,'xml')
+    items=soup.find_all("item")
     messages=[]
-    for i in range(1,min(3,len(items))):
+    for i in range(min(3,len(items))):
         item=items[i]
-        title=item.find("p").text
-        link=item.find("a")["href"]
+        title=item.find("title").text
+        link=item.find("link").text
         messages.append(f"ニュースタイトル: {title}\nURL: {link}")
     return messages
 
 if __name__ == "__main__":
     url="https://m.yahoo.co.jp/"
-    send_message="おはようございます！\n今日のニュースをお伝えします。\n\n"
+    send_message="おはようございます！\n今日のニュースをお伝えします。\n\nトップニュース"
     for msg in scrape_news(url):
-        send_message+=msg+"\n\n"
-    send_message+="スポーツ\n"
-    for msg in scrape_catecory_news("https://news.yahoo.co.jp/categories/sports"):
-        send_message+=msg+"\n\n"
+        send_message+=msg+"\n"
+    send_message+="\nスポーツ\n"
+    for msg in scrape_catecory_news("https://news.yahoo.co.jp/rss/topics/sports.xml"):
+        send_message+=msg+"\n"
+    send_message+="\nエンタメ\n"
+    for msg in scrape_catecory_news("https://news.yahoo.co.jp/rss/topics/entertainment.xml"):
+        send_message+=msg+"\n"
+    send_message+="\n国際\n"
+    for msg in scrape_catecory_news("https://news.yahoo.co.jp/rss/topics/world.xml"):
+        send_message+=msg+"\n"
+    send_message+="\n経済\n"
+    for msg in scrape_catecory_news("https://news.yahoo.co.jp/rss/topics/business.xml"):
+        send_message+=msg+"\n"
     send_line_message(send_message)
+    print(send_message)
 
