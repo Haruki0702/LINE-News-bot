@@ -45,7 +45,7 @@ def scrape_news(url):
     soup=BeautifulSoup(req.text,'html.parser')
     items=soup.find_all("article")
     messages=[]
-    for i in range(1,min(3,len(items))):
+    for i in range(1,len(items)):
         item=items[i]
         title=item.find("h1").text
         link=item.find("a")["href"]
