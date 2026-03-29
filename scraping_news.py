@@ -82,8 +82,8 @@ def scrape_catecory_news(url):
         item=items[i]
         title=item.find("p").text
         link=item.find("a")["href"]
-        current_message=f"ニュースタイトル: {title}\nURL: {link}"
-    return current_message
+        messages.append(f"ニュースタイトル: {title}\nURL: {link}")
+    return messages
 
 if __name__ == "__main__":
     url="https://m.yahoo.co.jp/"
