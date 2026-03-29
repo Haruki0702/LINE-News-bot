@@ -72,11 +72,26 @@ def scrape_news(url):
         time.sleep(15)
     return messages
 
+def scrape_catecory_news(url):
+    req=requests.get(url)
+    req.encoding=req.apparent_encoding
+    soup=BeautifulSoup(req.text,'html.parser')
+    items=soup.find_all(id="topicList")
+    messages=[]
+    for i in range(1,min(3,len(items))):
+        item=items[i]
+        title=item.find("p").text
+        link=item.find("a")["href"]
+        current_message=f"ニュースタイトル: {title}\nURL: {link}"
+    return current_message
+
 if __name__ == "__main__":
     url="https://m.yahoo.co.jp/"
-    scrape_news(url)
     send_message="おはようございます！\n今日のニュースをお伝えします。\n\n"
     for msg in scrape_news(url):
+        send_message+=msg+"\n\n"
+    send_message+="スポーツ\n"
+    for msg in scrape_catecory_news("https://sports.yahoo.co.jp/"):
         send_message+=msg+"\n\n"
     send_line_message(send_message)
 
