@@ -45,7 +45,7 @@ def scrape_news(url):
     soup=BeautifulSoup(req.text,'html.parser')
     items=soup.find_all("article")
     messages=[]
-    for i in range(1,len(items)):
+    for i in range(1,min(3,len(items))):
         item=items[i]
         title=item.find("h1").text
         link=item.find("a")["href"]
@@ -70,12 +70,13 @@ def scrape_news(url):
             current_message+="\n詳細URLが見つかりませんでした\n"
         messages.append(current_message)
         time.sleep(15)
-    send_message="おはようございます！\n今日のニュースをお伝えします。\n\n"
-    for msg in messages:
-        send_message+=msg+"\n\n"
-    send_line_message(send_message)
+    return messages
 
 if __name__ == "__main__":
     url="https://m.yahoo.co.jp/"
     scrape_news(url)
+    send_message="おはようございます！\n今日のニュースをお伝えします。\n\n"
+    for msg in scrape_news(url):
+        send_message+=msg+"\n\n"
+    send_line_message(send_message)
 
