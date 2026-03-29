@@ -49,7 +49,7 @@ def scrape_news(url):
         item=items[i]
         title=item.find("h1").text
         link=item.find("a")["href"]
-        current_message=f"ニュースタイトル: {title}\nURL: {link}"
+        current_message=f"{title}\nURL: {link}"
 
         content_req=requests.get(link)
         content_req.encoding=content_req.apparent_encoding
@@ -82,12 +82,12 @@ def scrape_catecory_news(url):
         item=items[i]
         title=item.find("title").text
         link=item.find("link").text
-        messages.append(f"ニュースタイトル: {title}\nURL: {link}")
+        messages.append(f"{title}\nURL: {link}")
     return messages
 
 if __name__ == "__main__":
     url="https://m.yahoo.co.jp/"
-    send_message="おはようございます！\n今日のニュースをお伝えします。\n\nトップニュース"
+    send_message="おはようございます！\n今日のニュースをお伝えします。\n\nトップニュース\n"
     for msg in scrape_news(url):
         send_message+=msg+"\n"
     send_message+="\nスポーツ\n"
